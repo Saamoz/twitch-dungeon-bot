@@ -24,7 +24,9 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
+    "ESLint": "npm:eslint@^8.56.0",
     "express": "^4.17.2",
+    "sqlite3": "^5.1.7",
     "tmi.js": "^1.8.5"
   }
 }
