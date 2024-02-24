@@ -26,7 +26,21 @@ export class dbManager {
 
       const insertStatement = `INSERT OR REPLACE INTO players (name, gold, xp, level) VALUES ('${playerObj.name}', ${playerObj.gold}, ${playerObj.xp}, ${playerObj.level})`
       this.db.run(insertStatement)
+    }
+
   }
-  
+
+  get_player(playerName) : typeof Player {
+    const getStatement = 'SELECT name, gold, xp, level FROM players WHERE name=?'
+
+    let playerObj;
+    
+    this.db.get(getStatement, [playerName], (error, row) => {
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+      console.log(row)
+      playerObj = new Player(row['name'], row['gold'], row['xp'], row['level'])
+    })
+
+    return playerObj
   }
 }

@@ -10,11 +10,11 @@ export class Player {
         3: 400
     }
    
-    constructor(name) {
-        this.gold = 0;
-        this.xp = 0;
-        this.level = 1;
+    constructor(name, gold=0, xp=0, level=1) {
         this.name = name;
+        this.gold = gold;
+        this.xp = xp;
+        this.level = level;
     }
 
     addxp(amount) : boolean {
