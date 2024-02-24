@@ -2,11 +2,9 @@ import * as tmi from "tmi.js";
 import Express from "express";
 import dotenv from "dotenv";
 
-
-
-const db_manager = require("./db_manager")
-const dungeon = require("./dungeon")
-
+import { Dungeon } from "./dungeon";
+import { dbManager } from "./db_manager"
+import { channel } from "diagnostics_channel";
 
 dotenv.config();
 
@@ -30,39 +28,37 @@ const client = new tmi.Client({
 
 client.connect();
 
+const db_manager = new dbManager('./db/playerdata.db')
+const dungeon = new Dungeon(client, db_manager)
+
 client.on("message", (channel, tags, message, isSelf) => {
   const senderUser = tags["display-name"];
 
   if (!isSelf) {
-    // if (quick_command_map.)
-
-    if (message == '!dungeon') {
-      const resp = dungeon.dungeonWelcome(senderUser)
-      client.say(
-        channel,
-        resp
-      );
+    switch (message.toLowerCase()) {
+      case '!dungeon': {
+        dungeon.dungeonWelcome(senderUser, channel);
+        break;
       }
-  
-    if (message == '!join') {
-      const resp = dungeon.joinDungeon(senderUser)
-      client.say(
-        channel,
-        resp
-      );
-    }
-  
-        
-    if (message == '!dungeonget') {
-      const resp = dungeon.getDungeon()
-      client.say(
-        channel,
-        resp
-      );
-    }
-  
+      case '!join': {
+        dungeon.joinDungeon(senderUser, channel)
+        break;
+      }
+      case '!dungeonget': {
+        dungeon.getDungeon(channel)
+        break;
+      }
+      case '!rundungeon': {
+        dungeon.runDungeon(channel)
+        break;
+      }
+      case '!stats': {
+        dungeon.getStats(senderUser, channel)
+        break;
+      }
+    }  
   }
-  }
+}
 );
 
 app.get("/", (req, res) => {
