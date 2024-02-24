@@ -30,17 +30,16 @@ export class dbManager {
 
   }
 
-  get_player(playerName) : typeof Player {
-    const getStatement = 'SELECT name, gold, xp, level FROM players WHERE name=?'
-
-    let playerObj;
+  async get_player(playerName) : Promise<Player> {
+    const getStatement = "SELECT name, gold, xp, level FROM players WHERE name=?"
     
-    this.db.get(getStatement, [playerName], (error, row) => {
-      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-      console.log(row)
-      playerObj = new Player(row['name'], row['gold'], row['xp'], row['level'])
+    return new Promise((resolve, reject) => {
+      this.db.get(getStatement, [playerName], (error, row) => {
+        if (error) reject(error);
+        if (row === undefined) return resolve(new Player(playerName))
+        return resolve(new Player(row['name'], row['gold'], row['xp'], row['level']));
+      })
     })
-
-    return playerObj
   }
+
 }

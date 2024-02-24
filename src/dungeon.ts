@@ -15,6 +15,11 @@ export class Dungeon {
         this.players_in_dungeon = {};
     }
 
+    async add_or_update_player(playerName) {
+        const playerObj = await this.db_manager.get_player(playerName)
+        return playerObj
+    }
+
     dungeonWelcome(senderUser, channel) { 
         this.twitch_client.say(
             channel,
@@ -22,15 +27,15 @@ export class Dungeon {
           );
     }
 
-    joinDungeon(senderUser, channel) {
+    async joinDungeon(senderUser, channel) {
         if (this.players_in_dungeon.hasOwnProperty(senderUser)) {
             this.twitch_client.say(
                 channel,
                 `@${senderUser} is already in the dungeon >:(!!!`
               );    
         } else {
-            const player = new Player(senderUser)
-            this.players_in_dungeon[senderUser] = player
+            const playerObj = await this.add_or_update_player(senderUser)
+            this.players_in_dungeon[senderUser] = playerObj
             this.twitch_client.say(
                 channel,
                 `@${senderUser} is now in the dungeon!`
@@ -75,25 +80,23 @@ export class Dungeon {
     
             }
 
-            this.players_in_dungeon[playerName] = playerObj
         }
-
         this.db_manager.persist_all(this.players_in_dungeon)
+        this.players_in_dungeon = {}
     }
 
-    getStats(senderUser, channel) {
-        if (this.players_in_dungeon.hasOwnProperty(senderUser)) {
-            const playerObj = this.players_in_dungeon[senderUser];
+    async getStats(senderUser, channel) {
+        const playerObj = await this.add_or_update_player(senderUser)
+        if (playerObj.gold == 0 && playerObj.xp == 0 && playerObj.level == 1) {
             this.twitch_client.say(
                 channel,
-                `${senderUser} is level ${playerObj.level}. They have ${playerObj.xp} xp and ${playerObj.gold} gold!`
-              );
-
+                `@${senderUser} has nothing... Maybe consider entering a dungeon`
+                );    
         } else {
-            this.twitch_client.say(
+        this.twitch_client.say(
             channel,
-            `@${senderUser} hs nothing... Maybe consider entering a dungeon`
-            );    
+            `${senderUser} is level ${playerObj.level}. They have ${playerObj.xp} xp and ${playerObj.gold} gold!`
+          );
         }
     }
 
