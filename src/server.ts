@@ -1,69 +1,98 @@
-import * as tmi from "tmi.js";
-import Express from "express";
-import dotenv from "dotenv";
+import { RefreshingAuthProvider } from '@twurple/auth'
+import { Bot, createBotCommand } from '@twurple/easy-bot'
+import { promises as fs } from 'fs'
 
-import { Dungeon } from "./dungeon";
-import { dbManager } from "./db_manager"
-import { channel } from "diagnostics_channel";
+import Express from 'express'
 
-dotenv.config();
+import { Dungeon } from './dungeon'
+import { dbManager } from './db_manager'
 
-const { WATCHED_CHANNEL, BOT_USERNAME, BOT_USER_ACCESS_TOKEN } = process.env;
+const clientId = '66ck4puv8ur1a2wfduhaegyphsntwe';
+const clientSecret = '6me1qmdowp7fri8igmblb8vwignzbm';
 
-if (!WATCHED_CHANNEL) throw new Error("WATCHED_CHANNEL required");
-if (!BOT_USERNAME) throw new Error("BOT_USERNAME required");
-if (!BOT_USER_ACCESS_TOKEN) throw new Error("BOT_USER_ACCESS_TOKEN required");
+const port = process.env.PORT || 4141
+const app = Express()
 
-const port = process.env.PORT || 4141;
+const tokenData = JSON.parse(await fs.readFile('./token.json', 'utf-8'))
+const authProvider = new RefreshingAuthProvider(
+	{
+		clientId,
+		clientSecret
+	}
+);
+await authProvider.addUserForToken(tokenData, ['chat']);
 
-const app = Express();
 
-const client = new tmi.Client({
-  channels: [WATCHED_CHANNEL],
-  identity: {
-    username: BOT_USERNAME,
-    password: `oauth:${BOT_USER_ACCESS_TOKEN}`,
-  },
-});
-
-client.connect();
+authProvider.onRefresh(async (userId, newTokenData) => await fs.writeFile('./token.json', JSON.stringify(newTokenData, null, 4), 'utf-8'));
 
 const db_manager = new dbManager('./db/playerdata.db')
-const dungeon = new Dungeon(client, db_manager)
+const dungeon = new Dungeon(db_manager)
 
-client.on("message", (channel, tags, message, isSelf) => {
-  const senderUser = tags["display-name"];
-
-  if (!isSelf) {
-    switch (message.toLowerCase()) {
-      case '!dungeon': {
-        dungeon.dungeonWelcome(senderUser, channel);
-        break;
-      }
-      case '!join': {
-        dungeon.joinDungeon(senderUser, channel)
-        break;
-      }
-      case '!dungeonget': {
-        dungeon.getDungeon(channel)
-        break;
-      }
-      case '!rundungeon': {
-        dungeon.runDungeon(channel)
-        break;
-      }
-      case '!stats': {
-        dungeon.getStats(senderUser, channel)
-        break;
-      }
-    }  
-  }
-}
-);
-
-app.get("/", (req, res) => {
-  res.json({ status: "ok" });
+const bot = new Bot({
+	authProvider,
+	channels: ['daemo72'],
+	commands: [
+        createBotCommand('dungeon', dungeon.dungeonWelcome),
+        createBotCommand('join', dungeon.joinDungeon.bind(dungeon)),
+        createBotCommand('rundungeon', dungeon.runDungeon.bind(dungeon)),
+        createBotCommand('stats', dungeon.getStats.bind(dungeon)),
+	]
 });
-app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`);
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const db_manager = new dbManager('./db/playerdata.db')
+// const dungeon = new Dungeon(client, db_manager)
+
+
+
+// client.on("message", (channel, tags, message, isSelf) => {
+//   const senderUser = tags["display-name"];
+
+//   if (!isSelf) {
+//     switch (message.toLowerCase()) {
+//       case '!dungeon': {
+//         dungeon.dungeonWelcome(senderUser, channel);
+//         break;
+//       }
+//       case '!join': {
+//         dungeon.joinDungeon(senderUser, channel)
+//         break;
+//       }
+//       case '!indungeon': {
+//         dungeon.getDungeon(channel)
+//         break;
+//       }
+//       case '!rundungeon': {
+//         dungeon.runDungeon(channel)
+//         break;
+//       }
+//       case '!stats': {
+//         dungeon.getStats(senderUser, channel)
+//         break;
+//       }
+//     }  
+//   }
+// }
+// );
+
+// app.get("/", (req, res) => {
+//   res.json({ status: "ok" });
+// });
+// app.listen(port, () => {
+//   console.log(`Listening on http://localhost:${port}`);
+// });
