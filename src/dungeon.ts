@@ -18,11 +18,11 @@ export class Dungeon {
   }
 
   dungeonWelcome(_, { reply }) { 
-    reply(`Welcome to the dungeon, `)
+    reply('Welcome to the dungeon, ')
   }
 
   async joinDungeon(_, { userName, say }) {
-    if (this.players_in_dungeon.hasOwnProperty(userName)) {
+    if (userName in this.players_in_dungeon) {
       say(`@${userName} is already in the dungeon >:(!!!`)    
     } else {
       const playerObj = await this.add_or_update_player(userName)
@@ -54,9 +54,9 @@ export class Dungeon {
   async getStats(_, { userName, reply }) {
     const playerObj = await this.add_or_update_player(userName)
     if (playerObj.gold == 0 && playerObj.xp == 0 && playerObj.level == 1) {
-        reply(`@${userName} has nothing... Maybe consider entering a dungeon`)    
+      reply(`@${userName} has nothing... Maybe consider entering a dungeon`)    
     } else {
-        reply(`${userName} is level ${playerObj.level}. They have ${playerObj.xp} xp and ${playerObj.gold} gold!`)
+      reply(`${userName} is level ${playerObj.level}. They have ${playerObj.xp} xp and ${playerObj.gold} gold!`)
     }
   }
 

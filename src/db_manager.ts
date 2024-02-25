@@ -34,7 +34,7 @@ export class dbManager {
     const getStatement = 'SELECT name, gold, xp, level FROM players WHERE name=?'
     
     return new Promise((resolve, reject) => {
-      this.db.get(getStatement, [playerName], (error, row: Object) => {
+      this.db.get(getStatement, [playerName], (error, row: Record<string, number>) => {
         if (error) reject(error)
         if (row === undefined) return resolve(new Player(playerName))
         return resolve(new Player(row['name'], row['gold'], row['xp'], row['level']))
