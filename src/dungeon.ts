@@ -22,6 +22,7 @@ export class Dungeon {
   }
 
   async joinDungeon(_, { userName, say }) {
+    console.log(`${userName} joining dungeon`)
     if (userName in this.players_in_dungeon) {
       say(`@${userName} is already in the dungeon >:(!!!`)    
     } else {
@@ -32,21 +33,22 @@ export class Dungeon {
   }
 
   runDungeon(params, { say }) {
-    let levelscore: number = 0
+    console.log('Running dungeon')
+    let levelscore = 0
     for (const playerName in this.players_in_dungeon) {
       const playerObj = this.players_in_dungeon[playerName]
       levelscore += playerObj.level
     }
 
     const difficulty_scale = {
-      "easy": 3,
-      "medium": 6,
-      "hard": 10
+      'easy': 3,
+      'medium': 6,
+      'hard': 10
     }
 
-    let difficulty;
+    let difficulty
     if (params.length === 0) {
-      difficulty = difficulty_scale["medium"]
+      difficulty = difficulty_scale['medium']
     } else {
       if (!(params[0] in difficulty_scale)) {
         say(`ERROR: Difficulty ${params[0]} not found!`)
@@ -58,9 +60,10 @@ export class Dungeon {
     const random_difficulty_mod = Math.random() + 0.5
     difficulty *= random_difficulty_mod
 
-    say(`Levels needed is ${Math.floor(difficulty)}`)
+    console.log(`Levels needed is ${Math.floor(difficulty)}`)
 
     if (levelscore > difficulty) {
+      console.log("Dungeon passed")
       for (const playerName in this.players_in_dungeon) {
         const playerObj = this.players_in_dungeon[playerName]
         const xp = Math.floor(Math.random() * 100)
@@ -76,12 +79,14 @@ export class Dungeon {
 
       this.db_manager.persist_all(this.players_in_dungeon)
     } else {
-      say(`Total player level of ${levelscore} was not high enough to pass the dungeon`)
+      console.log("Dungeon Failed")
+      say(`The dungeon was too powerful...`)
     }
     this.players_in_dungeon = {}
   }
 
   async getStats(_, { userName, reply }) {
+    console.log(`Getting ${userName} stats`)
     const playerObj = await this.add_or_update_player(userName)
     if (playerObj.gold == 0 && playerObj.xp == 0 && playerObj.level == 1) {
       reply(`@${userName} has nothing... Maybe consider entering a dungeon`)    
