@@ -31,23 +31,53 @@ export class Dungeon {
     }
   }
 
-  runDungeon(_, { say }) {
+  runDungeon(params, { say }) {
+    let levelscore: number = 0
     for (const playerName in this.players_in_dungeon) {
       const playerObj = this.players_in_dungeon[playerName]
-      const xp = Math.floor(Math.random() * 100)
-      const gold = Math.floor(Math.random() * 10)
+      levelscore += playerObj.level
+    }
 
-      say(`Wow! Looks like ${playerName} just got ${xp} xp and ${gold} gold!`)
-            
-      playerObj.gold += gold
-      const level_up = playerObj.addxp(xp)
+    const difficulty_scale = {
+      "easy": 3,
+      "medium": 6,
+      "hard": 10
+    }
 
-      if (level_up) {
-        say(`${playerName} is now level ${playerObj.level}. Lets gooo`)
+    let difficulty;
+    if (params.length === 0) {
+      difficulty = difficulty_scale["medium"]
+    } else {
+      if (!(params[0] in difficulty_scale)) {
+        say(`ERROR: Difficulty ${params[0]} not found!`)
+        return
+      }
+      difficulty = difficulty_scale[params[0]]
+    }
+    
+    const random_difficulty_mod = Math.random() + 0.5
+    difficulty *= random_difficulty_mod
+
+    say(`Levels needed is ${Math.floor(difficulty)}`)
+
+    if (levelscore > difficulty) {
+      for (const playerName in this.players_in_dungeon) {
+        const playerObj = this.players_in_dungeon[playerName]
+        const xp = Math.floor(Math.random() * 100)
+        const gold = Math.floor(Math.random() * 10)
+  
+        say(`Wow! Looks like ${playerName} just got ${xp} xp and ${gold} gold!`)
+              
+        playerObj.gold += gold
+        const level_up = playerObj.addxp(xp)
+  
+        if (level_up) say(`${playerName} is now level ${playerObj.level}. Lets gooo`)
       }
 
+      this.db_manager.persist_all(this.players_in_dungeon)
+    } else {
+      say(`Total player level of ${levelscore} was not high enough to pass the dungeon`)
     }
-    this.db_manager.persist_all(this.players_in_dungeon)
     this.players_in_dungeon = {}
   }
 
