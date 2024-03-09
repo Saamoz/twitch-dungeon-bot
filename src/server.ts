@@ -1,8 +1,6 @@
 import { RefreshingAuthProvider } from '@twurple/auth'
 import { Bot, createBotCommand } from '@twurple/easy-bot'
-import { promises as fs } from 'fs'
 
-import Express from 'express'
 
 import { Dungeon } from './dungeon'
 import { dbManager } from './db_manager'
@@ -11,9 +9,8 @@ const clientId = '66ck4puv8ur1a2wfduhaegyphsntwe'
 const clientSecret = '6me1qmdowp7fri8igmblb8vwignzbm'
 
 const port = process.env.PORT || 4141
-const app = Express()
 
-const tokenData = JSON.parse(await fs.readFile('./token.json', 'utf-8'))
+const tokenData = await Bun.file('./token.json').json()
 const authProvider = new RefreshingAuthProvider(
   {
     clientId,
@@ -23,7 +20,7 @@ const authProvider = new RefreshingAuthProvider(
 await authProvider.addUserForToken(tokenData, ['chat'])
 
 
-authProvider.onRefresh(async (userId, newTokenData) => await fs.writeFile('./token.json', JSON.stringify(newTokenData, null, 4), 'utf-8'))
+authProvider.onRefresh(async (userId, newTokenData) => await Bun.write('./token.json', JSON.stringify(newTokenData, null, 4)))
 
 const db_manager = new dbManager('./db/playerdata.db')
 const dungeon = new Dungeon(db_manager)
@@ -39,9 +36,21 @@ new Bot({
   ]
 })
 
-app.get('/', (req, res) => {
-  res.json({ status: 'ok' })
-})
-app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`)
-})
+const BASE_PATH = "./public";
+Bun.serve({
+  port: port,
+  async fetch(req) {
+    const filePath = BASE_PATH + new URL(req.url).pathname;
+    console.log(filePath)
+    const file = Bun.file(filePath);
+
+    console.log(await file.text())
+
+    // return new Response(filePath);
+    
+    return new Response(file);
+  },
+  error() {
+    return new Response(null, { status: 404 });
+  },
+});

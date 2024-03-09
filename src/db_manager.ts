@@ -1,17 +1,12 @@
 import { Player } from './player' 
-import { Database } from 'sqlite3'
+import { Database } from 'bun:sqlite'
 
 export class dbManager {
   db: Database
 
   constructor(db_path) {
-    const db = new Database(db_path, (err) => {
-      if (err) {
-        console.error(err.message)
-      }
-      console.log('Connected to the database.')
-    })
-  
+    const db = new Database(db_path)
+    console.log('Connected to the database.')
     db.run('CREATE TABLE IF NOT EXISTS players(name TEXT PRIMARY KEY, gold data_type INTEGER, xp data_type INTEGER, level data_type INTEGER)')
     this.db = db
   }
@@ -31,14 +26,13 @@ export class dbManager {
   }
 
   async get_player(playerName) : Promise<Player> {
-    const getStatement = 'SELECT name, gold, xp, level FROM players WHERE name=?'
+    const getStatement = 'SELECT name, gold, xp, level FROM players WHERE name=$name'
     
     return new Promise((resolve, reject) => {
-      this.db.get(getStatement, [playerName], (error, row: Record<string, number>) => {
-        if (error) reject(error)
-        if (row === undefined) return resolve(new Player(playerName))
-        return resolve(new Player(row['name'], row['gold'], row['xp'], row['level']))
-      })
+      const result = this.db.query(getStatement).get({ $name: playerName })
+      if (result === undefined) throw Error
+      if (result === null) { return resolve(new Player(playerName)) }
+      else {return resolve(new Player(result['name'], result['gold'], result['xp'], result['level']))}
     })
   }
 

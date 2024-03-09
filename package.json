@@ -6,7 +6,6 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "bun src/server.ts",
-    "start": "npm run build && node dist/server.js",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
     "lint:fix": "npm run lint -- --fix"
@@ -14,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bun": "^1.0.8",
     "@types/node": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
@@ -27,8 +27,6 @@
     "@twurple/easy-bot": "^7.0.10",
     "ESLint": "npm:eslint@^8.56.0",
     "dotenv": "^16.0.3",
-    "express": "^4.17.2",
-    "sqlite3": "^5.1.7",
     "tmi.js": "^1.8.5"
   }
 }
