@@ -63,7 +63,7 @@ export class Dungeon {
     console.log(`Levels needed is ${Math.floor(difficulty)}`)
 
     if (levelscore > difficulty) {
-      console.log("Dungeon passed")
+      console.log('Dungeon passed')
       for (const playerName in this.players_in_dungeon) {
         const playerObj = this.players_in_dungeon[playerName]
         const xp = Math.floor(Math.random() * 100)
@@ -79,8 +79,8 @@ export class Dungeon {
 
       this.db_manager.persist_all(this.players_in_dungeon)
     } else {
-      console.log("Dungeon Failed")
-      say(`The dungeon was too powerful...`)
+      console.log('Dungeon Failed')
+      say('The dungeon was too powerful...')
     }
     this.players_in_dungeon = {}
   }

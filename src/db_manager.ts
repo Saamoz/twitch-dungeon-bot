@@ -28,7 +28,7 @@ export class dbManager {
   async get_player(playerName) : Promise<Player> {
     const getStatement = 'SELECT name, gold, xp, level FROM players WHERE name=$name'
     
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       const result = this.db.query(getStatement).get({ $name: playerName })
       if (result === undefined) throw Error
       if (result === null) { return resolve(new Player(playerName)) }

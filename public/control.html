@@ -1,0 +1,50 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico"> -->
+
+    <title>DoejinBot Control Panel</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="control.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <main role="main" class="container">
+
+      <div class="starter-template">
+        <h1>Welcome to the Control Panel</h1>
+        <p class="lead">From here you shall run your dungeon.</p>  
+      </div>
+
+      <hr>
+
+      <div>
+        <form class="d-flex flex-row align-items-center flex-wrap" action="/rundungeon" method="POST">
+            <select class="form-select col" aria-label="Default select example">
+              <option selected>Open this select menu</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+    
+            <button type="submit" class="btn btn-primary col-auto">Submit</button>  
+        </form>
+
+      </div>      
+
+    </main><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
