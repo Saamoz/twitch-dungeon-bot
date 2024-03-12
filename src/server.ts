@@ -62,7 +62,7 @@ app.post('/say', (req, res) => {
   res.redirect('/control.html')
 })
 
-app.post('/say', (req, res) => {
+app.post('/announce', (req, res) => {
   botSay("Dungeon is starting soon! Use !join to join the dungeon!")
   res.redirect('/control.html')
 })
