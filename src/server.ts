@@ -21,6 +21,8 @@ const authProvider = new RefreshingAuthProvider(
 )
 await authProvider.addUserForToken(tokenData, ['chat'])
 
+const channelname = 'daemo72'
+
 
 authProvider.onRefresh(async (userId, newTokenData) => await Bun.write('./token.json', JSON.stringify(newTokenData, null, 4)))
 
@@ -29,25 +31,42 @@ const dungeon = new Dungeon(db_manager)
 
 const bot = new Bot({
   authProvider,
-  channels: ['daemo72'],
+  channels: [channelname],
   commands: [
     createBotCommand('dungeon', dungeon.dungeonWelcome),
     createBotCommand('join', dungeon.joinDungeon.bind(dungeon)),
-    createBotCommand('rundungeon', dungeon.runDungeon.bind(dungeon)),
+    // createBotCommand('rundungeon', dungeon.runDungeon.bind(dungeon)),
     createBotCommand('stats', dungeon.getStats.bind(dungeon)),
   ]
 })
 
+const botSay = (x) => {bot.say('daemo72', x)}
 
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
 app.post('/rundungeon', (req, res) => {
+  dungeon.runDungeon(req.body["difficulty"], botSay)
   res.redirect('/control.html')
 })
+
+app.post('/say', (req, res) => {
+  const message = req.body["message"]
+  if (message) {
+    botSay(message)
+  }
+  res.redirect('/control.html')
+})
+
+app.post('/say', (req, res) => {
+  botSay("Dungeon is starting soon! Use !join to join the dungeon!")
+  res.redirect('/control.html')
+})
+
 
 app.listen(port, () => {
   console.log(`Web UI Started at http://localhost:${port}/control.html`)

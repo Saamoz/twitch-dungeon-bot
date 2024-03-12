@@ -32,7 +32,7 @@ export class Dungeon {
     }
   }
 
-  runDungeon(params, { say }) {
+  runDungeon(difficulty_name, say) {
     console.log('Running dungeon')
     let levelscore = 0
     for (const playerName in this.players_in_dungeon) {
@@ -46,15 +46,11 @@ export class Dungeon {
       'hard': 10
     }
 
-    let difficulty
-    if (params.length === 0) {
-      difficulty = difficulty_scale['medium']
+    let difficulty: number;
+    if (difficulty_name in difficulty_scale) {
+      difficulty = difficulty_scale[difficulty_name]
     } else {
-      if (!(params[0] in difficulty_scale)) {
-        say(`ERROR: Difficulty ${params[0]} not found!`)
-        return
-      }
-      difficulty = difficulty_scale[params[0]]
+      difficulty = difficulty_scale["medium"]
     }
     
     const random_difficulty_mod = Math.random() + 0.5

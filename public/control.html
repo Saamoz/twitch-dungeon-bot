@@ -27,16 +27,32 @@
 
       <hr>
 
+
       <div>
-        <form class="d-flex flex-row align-items-center flex-wrap" action="/rundungeon" method="POST">
-            <select class="form-select col" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-    
-            <button type="submit" class="btn btn-primary col-auto">Submit</button>  
+
+        <h5>Send Message to Channel</h5>
+
+        <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/say" method="POST">
+          <input type="text" class="form-control col" placeholder="Message to send" name="message">
+
+          <button type="submit" class="btn btn-primary col-auto">Send Message</button>  
+        </form>
+
+        <h5>Dungeon Controls</h5>
+
+        <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/announce" method="POST">
+          <button type="submit" class="btn btn-primary col-auto">Announce Dungeon!</button>  
+        </form>
+
+        <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/rundungeon" method="POST">
+          <select class="form-select col" aria-label="Dungeon difficulty menu" name="difficulty">
+            <option selected>Dungeon difficulty</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+  
+          <button type="submit" class="btn btn-primary col-auto">Start Dungeon</button>  
         </form>
 
       </div>      
