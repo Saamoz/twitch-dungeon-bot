@@ -1,1 +1,1 @@
-wsl /home/saamo/.bun/bin/bun src/server.ts
+wsl /home/dogad/.bun/bin/bun src/server.ts
