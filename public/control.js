@@ -83,7 +83,7 @@ async function updatePlayerList() {
 
   for (const playerName in playerObjects) {
     const playerObj = playerObjects[playerName]
-    const text = `${playerName} (${playerObj.xp} xp, ${playerObj.gold} gold)`
+    const text = `${playerName} (level ${playerObj.level}, ${playerObj.xp} xp, ${playerObj.gold} gold)`
 
     let newItem = document.createElement("li");
     const itemText = document.createTextNode(text);
