@@ -38,29 +38,43 @@
           <button type="submit" class="btn btn-primary col-auto">Send Message</button>  
         </form>
 
-        <h5>Dungeon Controls</h5>
+      </div>
 
-        <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/announce" method="POST">
-          <button type="submit" class="btn btn-primary col-auto">Announce Dungeon!</button>  
-        </form>
+      <button onclick="toggleDungeon()" class="btn btn-danger" id="togglebtn">Open Dungeon</button>  
 
-        <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/rundungeon" method="POST">
-          <select class="form-select col" aria-label="Dungeon difficulty menu" name="difficulty">
-            <option selected>Dungeon difficulty</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
+      <div id="controlContainer">
+        <div id="dungeonControls">
+
+          <h5>Dungeon Controls</h5>
   
-          <button type="submit" class="btn btn-primary col-auto">Start Dungeon</button>  
-        </form>
+          <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/announce" method="POST">
+            <button type="submit" class="btn btn-primary col-auto">Announce Dungeon!</button>  
+          </form>
+  
+          <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/rundungeon" method="POST">
+            <select class="form-select col" aria-label="Dungeon difficulty menu" name="difficulty">
+              <option selected>Dungeon difficulty</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+    
+            <button type="submit" class="btn btn-primary col-auto">Start Dungeon</button>  
+          </form>
+  
+        </div>
+  
+        <div id="overlay"></div>
+      </div>
 
-      </div>      
+
+      
 
     </main><!-- /.container -->
 
     <!-- Bootstrap core JavaScript -->
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="control.js"></script>
   </body>
 </html>

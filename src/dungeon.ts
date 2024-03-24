@@ -5,11 +5,13 @@ export class Dungeon {
 
   db_manager: dbManager
   players_in_dungeon: {[key: string]: Player}
+  open: boolean
 
   constructor(db_manager: dbManager) {
     console.log('Starting dungeon.ts')
     this.db_manager = db_manager
     this.players_in_dungeon = {}
+    this.open = false
   }
 
   async add_or_update_player(playerName) {
@@ -22,7 +24,10 @@ export class Dungeon {
   }
 
   async joinDungeon(_, { userName, say }) {
-    console.log(`${userName} joining dungeon`)
+    console.log(`${userName} attempting to join dungeon`)
+    if (!this.open) {
+      say(`The dungeon is closed @${userName}! Ask the Doe to open it.`)    
+    }
     if (userName in this.players_in_dungeon) {
       say(`@${userName} is already in the dungeon >:(!!!`)    
     } else {
