@@ -82,9 +82,11 @@ app.post('/openstore', (req, res) => {
   if (req.body["doopen"]) {
     if (dungeon.store_open) {
       console.log('store close')
+      botSay("Store is closing! ദ്ദി ˉ͈̀꒳ˉ͈́ )✧")
       dungeon.store_open = false 
     } else {
       console.log('store open')
+      botSay("Store is open for business! ٩(^ᗜ^ )و ´-")
       dungeon.store_open = true  
     }
   } 
