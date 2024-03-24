@@ -24,7 +24,7 @@ export class Dungeon {
   }
 
   async joinDungeon(_, { userName, say }) {
-    console.log(`${userName} attempting to join dungeon`)
+    console.log(`${userName} joining dungeon`)
     if (!this.open) {
       say('The dungeon is closed! Ask the Doe to open it.')    
     } else {

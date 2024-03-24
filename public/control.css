@@ -7,6 +7,10 @@ div {
     padding-bottom: 1em;
 }
 
+h5 {
+  padding-right: 1em;
+}
+
 #controlContainer {
     position: relative;
   }

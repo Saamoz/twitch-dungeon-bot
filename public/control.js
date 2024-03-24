@@ -1,19 +1,4 @@
-// Create WebSocket connection.
-const socket = new WebSocket("ws://localhost:4142");
 let open = false;
-
-// Connection opened
-socket.addEventListener("open", (event) => {
-  console.log(event)
-  // socket.send("Hello Server!");
-});
-
-// Listen for messages
-socket.addEventListener("message", (event) => {
-  console.log(event)
-  // console.log("Message from server ", event.data);
-});
-
 
 addEventListener("submit", (e) => {
   e.preventDefault()
@@ -61,5 +46,18 @@ function updateDifficultyNumber() {
   if (selectDifficulty.value in value_map) {
     numberDifficulty.value = value_map[selectDifficulty.value]
   }
+}
 
+async function updatePlayerList() {
+  const response = await fetch("/playerlist")
+  const playerlist = await response.json();
+  let list = document.getElementById("playerlist");
+  list.innerHTML = ''
+  playerlist.forEach(p => {
+    let newItem = document.createElement("li");
+    const itemText = document.createTextNode(p);
+    newItem.appendChild(itemText);
+
+    list.appendChild(newItem);
+  })
 }

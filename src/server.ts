@@ -2,7 +2,6 @@ import { RefreshingAuthProvider } from '@twurple/auth'
 import { Bot, createBotCommand } from '@twurple/easy-bot'
 
 import express from 'express'
-import { WebSocketServer } from 'ws'
 
 import { Dungeon } from './dungeon'
 import { dbManager } from './db_manager'
@@ -78,21 +77,11 @@ app.post('/opendungeon', (req, res) => {
   res.status(200)
 })
 
-app.listen(port, () => {
-  console.log(`Web UI Started at http://localhost:${port}/control.html`)
+app.get('/playerlist', (req, res) => {
+  const playerList = Object.keys(dungeon.players_in_dungeon)
+  res.send(playerList)
 })
 
-
-const wss = new WebSocketServer({ port: port + 1 })
-
-wss.on('connection', function connection(ws) {
-  ws.on('error', console.error)
-
-  ws.on('message', function message(data: string) {
-    
-    const jsonObject = JSON.parse(data)
-    console.log(jsonObject)
-  })
-
-  ws.send('something')
+app.listen(port, () => {
+  console.log(`Web UI Started at http://localhost:${port}/control.html`)
 })
