@@ -1,0 +1,1 @@
+wsl /home/saamo/.bun/bin/bun src/server.ts

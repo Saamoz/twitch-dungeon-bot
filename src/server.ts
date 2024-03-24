@@ -37,6 +37,7 @@ const bot = new Bot({
     createBotCommand('join', dungeon.joinDungeon.bind(dungeon)),
     // createBotCommand('rundungeon', dungeon.runDungeon.bind(dungeon)),
     createBotCommand('stats', dungeon.getStats.bind(dungeon)),
+    createBotCommand('buypotion', dungeon.buypotion.bind(dungeon)),
   ]
 })
 
@@ -48,7 +49,7 @@ app.use(express.static('public'))
 app.use(express.json())
 
 app.post('/rundungeon', (req, res) => {
-  dungeon.runDungeon(req.body['difficulty'], botSay)
+  dungeon.runDungeon(req.body['difficultyVal'], botSay)
   res.status(200)
 })
 
@@ -77,6 +78,19 @@ app.post('/opendungeon', (req, res) => {
     }
   } 
   res.send(dungeon.open)
+})
+
+app.post('/openstore', (req, res) => {
+  if (req.body["doopen"]) {
+    if (dungeon.store_open) {
+      console.log('store close')
+      dungeon.store_open = false 
+    } else {
+      console.log('store open')
+      dungeon.store_open = true  
+    }
+  } 
+  res.send(dungeon.store_open)
 })
 
 app.get('/isopen', (req, res) => {

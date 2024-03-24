@@ -9,6 +9,10 @@ export class Player {
     2: 200,
     3: 400
   }
+
+  get_level_threshold(level) {
+    return 100 * Math.pow(2, level - 1)
+  }
    
   constructor(name, gold=0, xp=0, level=1) {
     this.name = name
@@ -19,8 +23,8 @@ export class Player {
 
   addxp(amount) : boolean {
     this.xp += amount
-    if (this.xp > this.level_thresholds[this.level]) {
-      this.xp -= this.level_thresholds[this.level]
+    if (this.xp > this.get_level_threshold(this.level)) {
+      this.xp -= this.get_level_threshold(this.level)
       this.level += 1
       return true
     }

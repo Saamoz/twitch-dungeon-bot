@@ -32,11 +32,31 @@ async function dungeonOpen(doopen) {
     button.innerHTML = "Open Dungeon"
     overlay.style.display = ""
   }
+}
 
+async function storeOpen(doopen) {
+  let button = document.getElementById("storebtn")
+  const resp = await fetch("/openstore", {
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({doopen: doopen})
+  })
+  const shouldClose = await resp.json()
+  if (shouldClose) {
+    button.innerHTML = "Close Store"
+  } else {
+    button.innerHTML = "Open Store"
+  }
 }
 
 async function toggleDungeon() {
   dungeonOpen(true)
+}
+
+async function toggleStore() {
+  storeOpen(true)
 }
 
 function updateDifficultyNumber() {
@@ -74,5 +94,6 @@ async function updatePlayerList() {
 }
 
 dungeonOpen(false)
+storeOpen(false)
 
 setInterval(updatePlayerList, 1000)

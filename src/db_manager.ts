@@ -15,14 +15,16 @@ export class dbManager {
     console.log(`Writing data for player ${player.name}`)
   }
 
+  persist_one(playerObj) {
+    const insertStatement = `INSERT OR REPLACE INTO players (name, gold, xp, level) VALUES ('${playerObj.name}', ${playerObj.gold}, ${playerObj.xp}, ${playerObj.level})`
+    this.db.run(insertStatement)
+  }
+
   persist_all(player_dict) {
     for (const key in player_dict) {
       const playerObj = player_dict[key]
-
-      const insertStatement = `INSERT OR REPLACE INTO players (name, gold, xp, level) VALUES ('${playerObj.name}', ${playerObj.gold}, ${playerObj.xp}, ${playerObj.level})`
-      this.db.run(insertStatement)
+      this.persist_one(playerObj)    
     }
-
   }
 
   async get_player(playerName) : Promise<Player> {

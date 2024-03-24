@@ -6,12 +6,14 @@ export class Dungeon {
   db_manager: dbManager
   players_in_dungeon: {[key: string]: Player}
   open: boolean
+  store_open: boolean
 
   constructor(db_manager: dbManager) {
     console.log('Starting dungeon.ts')
     this.db_manager = db_manager
     this.players_in_dungeon = {}
     this.open = false
+    this.store_open = false
   }
 
   async add_or_update_player(playerName) {
@@ -38,25 +40,12 @@ export class Dungeon {
     }
   }
 
-  runDungeon(difficulty_name, say) {
+  runDungeon(difficulty, say) {
     console.log('Running dungeon')
     let levelscore = 0
     for (const playerName in this.players_in_dungeon) {
       const playerObj = this.players_in_dungeon[playerName]
       levelscore += playerObj.level
-    }
-
-    const difficulty_scale = {
-      'easy': 3,
-      'medium': 6,
-      'hard': 10
-    }
-
-    let difficulty: number
-    if (difficulty_name in difficulty_scale) {
-      difficulty = difficulty_scale[difficulty_name]
-    } else {
-      difficulty = difficulty_scale['medium']
     }
     
     const random_difficulty_mod = Math.random() + 0.5
@@ -68,8 +57,8 @@ export class Dungeon {
       console.log('Dungeon passed')
       for (const playerName in this.players_in_dungeon) {
         const playerObj = this.players_in_dungeon[playerName]
-        const xp = Math.floor(Math.random() * 100)
-        const gold = Math.floor(Math.random() * 10)
+        const xp = Math.floor(Math.random() * difficulty * 10)
+        const gold = Math.floor(Math.random() * difficulty)
   
         say(`Wow! Looks like ${playerName} just got ${xp} xp and ${gold} gold!`)
               
@@ -94,6 +83,22 @@ export class Dungeon {
       reply(`@${userName} has nothing... Maybe consider entering a dungeon`)    
     } else {
       reply(`${userName} is level ${playerObj.level}. They have ${playerObj.xp} xp and ${playerObj.gold} gold!`)
+    }
+  }
+
+  async buypotion(_, { userName, reply }) {
+    if (!this.store_open) {
+      reply('The store is closed!')
+    } else {
+      const potionCost = 10;
+      let playerObj = await this.add_or_update_player(userName)
+      if (playerObj.gold >= potionCost) {
+        reply(`Congrats on your new potion!`)
+        playerObj.gold -= potionCost
+        this.db_manager.persist_one(playerObj)
+      } else {
+        reply(`You need ${potionCost - playerObj.gold} more gold to afford a potion!`)
+      }
     }
   }
 
