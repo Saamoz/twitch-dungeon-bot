@@ -42,41 +42,38 @@
 
       </div>
 
-      <button onclick="toggleDungeon()" class="btn btn-danger" id="togglebtn">Open Dungeon</button>
+      <button onclick="toggleDungeon()" data-bs-toggle="collapse" href="#dungeonControls" class="btn btn-danger" id="togglebtn">Open Dungeon</button>
       <button onclick="toggleStore()" class="btn btn-danger" id="storebtn">Open Store</button>  
 
-      <div id="controlContainer">
-        <div id="dungeonControls">
+      <div id="dungeonControls" class="collapse">
 
-          <h5>Dungeon Controls</h5>
-  
-          <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/announce" method="POST">
-            <button type="submit" class="btn btn-primary col-auto">Announce Dungeon!</button>  
-          </form>
-  
-          <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/rundungeon" method="POST">
-            <select class="form-select col" aria-label="Dungeon difficulty menu" name="difficultySelect" id="difficultySelect" onchange="updateDifficultyNumber()">
-              <option selected>Dungeon difficulty</option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
+        <h5>Dungeon Controls</h5>
 
-            <input type="number" class="form-control .col-sm-" placeholder="Levels needed" name="difficultyVal" id="difficultyVal" >
-    
-            <button type="submit" class="btn btn-primary col-auto">Start Dungeon</button>  
-          </form>
+        <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/announce" method="POST">
+          <button type="submit" class="btn btn-primary col-auto">Announce Dungeon!</button>  
+        </form>
+
+        <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/rundungeon" method="POST">
+          <select class="form-select col" aria-label="Dungeon difficulty menu" name="difficultySelect" id="difficultySelect" onchange="updateDifficultyNumber()">
+            <option selected>Dungeon difficulty</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+
+          <input type="number" class="form-control .col-sm-" placeholder="Levels needed" name="difficultyVal" id="difficultyVal" >
   
-          <div class="d-flex align-items-center">
-            <h5 class="d-inline-block"><u>Players in Dungeon</u></h5>
-            <!-- <button type="submit" class="btn btn-primary btn-sm d-inline-block" onclick="updatePlayerList()">Update</button>   -->
-          </div>
-          <ul id="playerlist">
-          </ul>
+          <button type="submit" class="btn btn-primary col-auto">Start Dungeon</button>  
+        </form>
+
+        <div class="d-flex align-items-center">
+          <h5 class="d-inline-block"><u>Players in Dungeon</u></h5>
+          <!-- <button type="submit" class="btn btn-primary btn-sm d-inline-block" onclick="updatePlayerList()">Update</button>   -->
         </div>
-  
-        <div id="overlay"></div>
+        <ul id="playerlist">
+        </ul>
       </div>
+  
 
     </main>
 

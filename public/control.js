@@ -16,7 +16,8 @@ addEventListener("submit", (e) => {
 
 async function dungeonOpen(doopen) {
   let button = document.getElementById("togglebtn")
-  let overlay = document.getElementById("overlay")
+  const bsCollapse = new bootstrap.Collapse('#dungeonControls', {toggle: false})
+  
   const resp = await fetch("/opendungeon", {
     method: "POST", 
     headers: {
@@ -27,10 +28,10 @@ async function dungeonOpen(doopen) {
   const shouldClose = await resp.json()
   if (shouldClose) {
     button.innerHTML = "Close Dungeon"
-    overlay.style.display = "none"
+    bsCollapse.show()    
   } else {
     button.innerHTML = "Open Dungeon"
-    overlay.style.display = ""
+    bsCollapse.hide()
   }
 }
 

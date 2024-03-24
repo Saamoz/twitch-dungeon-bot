@@ -11,12 +11,7 @@ h5 {
   padding-right: 1em;
 }
 
-#controlContainer {
-    position: relative;
-  }
-
 #overlay {
-    /* display: none; */
     position: absolute;
     top: 1em;
     background-color: gray;
