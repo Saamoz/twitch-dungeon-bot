@@ -70,6 +70,7 @@ app.post('/opendungeon', (req, res) => {
     if (dungeon.open) {
       console.log('dungeon close')
       dungeon.open = false 
+      dungeon.players_in_dungeon = {}
     } else {
       console.log('dungeon open')
       dungeon.open = true  

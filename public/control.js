@@ -74,3 +74,5 @@ async function updatePlayerList() {
 }
 
 dungeonOpen(false)
+
+setInterval(updatePlayerList, 1000)
