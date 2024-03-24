@@ -2,7 +2,7 @@ import { RefreshingAuthProvider } from '@twurple/auth'
 import { Bot, createBotCommand } from '@twurple/easy-bot'
 
 import express from 'express'
-import { WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws'
 
 import { Dungeon } from './dungeon'
 import { dbManager } from './db_manager'
@@ -48,52 +48,51 @@ const botSay = (x) => {bot.say('daemo72', x)}
 app.use(express.static('public'))
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 app.post('/rundungeon', (req, res) => {
-  dungeon.runDungeon(req.body["difficulty"], botSay)
-  res.redirect('/control.html')
+  dungeon.runDungeon(req.body['difficulty'], botSay)
+  res.status(200)
 })
 
 app.post('/say', (req, res) => {
-  console.log(req.body)
-  const message = req.body["message"]
+  const message = req.body['message']
   if (message) {
     botSay(message)
   }
-  // res.redirect('/control.html')
+  res.status(200)
 })
 
 app.post('/announce', (req, res) => {
-  botSay("Dungeon is starting soon! Use !join to join the dungeon!")
-  res.redirect('/control.html')
+  botSay('Dungeon is opeb! Use !join to join the dungeon!')
+  res.status(200)
 })
 
 
 app.post('/opendungeon', (req, res) => {
-  console.log("Opening dungeon")
-  dungeon.open = true;
-  res.redirect('/control.html')
+  if (dungeon.open) {
+    console.log('dungeon close')
+    dungeon.open = false  
+  } else {
+    console.log('dungeon open')
+    dungeon.open = true  
+  }
+  res.status(200)
 })
-
 
 app.listen(port, () => {
   console.log(`Web UI Started at http://localhost:${port}/control.html`)
 })
 
 
-const wss = new WebSocketServer({ port: port + 1 });
+const wss = new WebSocketServer({ port: port + 1 })
 
 wss.on('connection', function connection(ws) {
-  ws.on('error', console.error);
+  ws.on('error', console.error)
 
-  ws.on('message', function message(data) {
+  ws.on('message', function message(data: string) {
     
-    const jsonObject = JSON.parse(data);
-    console.log(jsonObject);
-  });
+    const jsonObject = JSON.parse(data)
+    console.log(jsonObject)
+  })
 
-  ws.send('something');
-});
+  ws.send('something')
+})

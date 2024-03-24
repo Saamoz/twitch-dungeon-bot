@@ -21,8 +21,7 @@ addEventListener("submit", (e) => {
   let bodyData = {};
   formData.forEach((value, key) => bodyData[key] = value);
 
-  
-  fetch("/say", {
+  fetch(e.target.action, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -47,4 +46,20 @@ async function toggleDungeon() {
     button.innerHTML = "Close Dungeon"
     overlay.style.display = "none"
   }
+}
+
+function updateDifficultyNumber() {
+  let selectDifficulty = document.getElementById("difficultySelect")
+  let numberDifficulty = document.getElementById("difficultyVal")
+
+  value_map = {
+    "easy": 2,
+    "medium": 5,
+    "hard": 10
+  }
+
+  if (selectDifficulty.value in value_map) {
+    numberDifficulty.value = value_map[selectDifficulty.value]
+  }
+
 }

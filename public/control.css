@@ -27,6 +27,10 @@ div {
     padding-right: 2em;
 }
 
+#difficultyVal {
+  width: auto;
+}
+
 .doejin-form {
 padding: 0.5rem 0.5rem;
 }

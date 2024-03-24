@@ -52,12 +52,14 @@
           </form>
   
           <form class="d-flex flex-row align-items-center flex-wrap doejin-form" action="/rundungeon" method="POST">
-            <select class="form-select col" aria-label="Dungeon difficulty menu" name="difficulty">
+            <select class="form-select col" aria-label="Dungeon difficulty menu" name="difficultySelect" id="difficultySelect" onchange="updateDifficultyNumber()">
               <option selected>Dungeon difficulty</option>
               <option value="easy">Easy</option>
               <option value="medium">Medium</option>
               <option value="hard">Hard</option>
             </select>
+
+            <input type="number" class="form-control .col-sm-" placeholder="Levels needed" name="difficultyVal" id="difficultyVal" >
     
             <button type="submit" class="btn btn-primary col-auto">Start Dungeon</button>  
           </form>

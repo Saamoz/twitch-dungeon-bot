@@ -26,14 +26,15 @@ export class Dungeon {
   async joinDungeon(_, { userName, say }) {
     console.log(`${userName} attempting to join dungeon`)
     if (!this.open) {
-      say(`The dungeon is closed @${userName}! Ask the Doe to open it.`)    
-    }
-    if (userName in this.players_in_dungeon) {
-      say(`@${userName} is already in the dungeon >:(!!!`)    
+      say('The dungeon is closed! Ask the Doe to open it.')    
     } else {
-      const playerObj = await this.add_or_update_player(userName)
-      this.players_in_dungeon[userName] = playerObj
-      say(`@${userName} is now in the dungeon!`)    
+      if (userName in this.players_in_dungeon) {
+        say(`@${userName} is already in the dungeon >:(!!!`)    
+      } else {
+        const playerObj = await this.add_or_update_player(userName)
+        this.players_in_dungeon[userName] = playerObj
+        say(`@${userName} is now in the dungeon!`)    
+      }
     }
   }
 
@@ -51,11 +52,11 @@ export class Dungeon {
       'hard': 10
     }
 
-    let difficulty: number;
+    let difficulty: number
     if (difficulty_name in difficulty_scale) {
       difficulty = difficulty_scale[difficulty_name]
     } else {
-      difficulty = difficulty_scale["medium"]
+      difficulty = difficulty_scale['medium']
     }
     
     const random_difficulty_mod = Math.random() + 0.5
