@@ -1,5 +1,3 @@
-let open = false;
-
 addEventListener("submit", (e) => {
   e.preventDefault()
   const formData = new FormData(e.target);
@@ -16,21 +14,29 @@ addEventListener("submit", (e) => {
 });
 
 
-async function toggleDungeon() {
+async function dungeonOpen(doopen) {
   let button = document.getElementById("togglebtn")
   let overlay = document.getElementById("overlay")
-  const response = fetch("/opendungeon", {
-    method: "POST"
+  const resp = await fetch("/opendungeon", {
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({doopen: doopen})
   })
-  if (open) {
-    open = false
-    button.innerHTML = "Open Dungeon"
-    overlay.style.display = ""
-  } else {
-    open = true
+  const shouldClose = await resp.json()
+  if (shouldClose) {
     button.innerHTML = "Close Dungeon"
     overlay.style.display = "none"
+  } else {
+    button.innerHTML = "Open Dungeon"
+    overlay.style.display = ""
   }
+
+}
+
+async function toggleDungeon() {
+  dungeonOpen(true)
 }
 
 function updateDifficultyNumber() {
@@ -50,14 +56,21 @@ function updateDifficultyNumber() {
 
 async function updatePlayerList() {
   const response = await fetch("/playerlist")
-  const playerlist = await response.json();
+  const playerObjects = await response.json();
   let list = document.getElementById("playerlist");
   list.innerHTML = ''
-  playerlist.forEach(p => {
+
+  for (const playerName in playerObjects) {
+    const playerObj = playerObjects[playerName]
+    const text = `${playerName} (${playerObj.xp} xp, ${playerObj.gold} gold)`
+
     let newItem = document.createElement("li");
-    const itemText = document.createTextNode(p);
+    const itemText = document.createTextNode(text);
     newItem.appendChild(itemText);
 
     list.appendChild(newItem);
-  })
+
+  }
 }
+
+dungeonOpen(false)

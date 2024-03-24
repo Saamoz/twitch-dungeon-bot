@@ -61,25 +61,29 @@ app.post('/say', (req, res) => {
 })
 
 app.post('/announce', (req, res) => {
-  botSay('Dungeon is opeb! Use !join to join the dungeon!')
+  botSay('Dungeon is open! Use !join to join the dungeon!')
   res.status(200)
 })
 
-
 app.post('/opendungeon', (req, res) => {
-  if (dungeon.open) {
-    console.log('dungeon close')
-    dungeon.open = false  
-  } else {
-    console.log('dungeon open')
-    dungeon.open = true  
-  }
-  res.status(200)
+  if (req.body["doopen"]) {
+    if (dungeon.open) {
+      console.log('dungeon close')
+      dungeon.open = false 
+    } else {
+      console.log('dungeon open')
+      dungeon.open = true  
+    }
+  } 
+  res.send(dungeon.open)
+})
+
+app.get('/isopen', (req, res) => {
+  res.send(dungeon.open)
 })
 
 app.get('/playerlist', (req, res) => {
-  const playerList = Object.keys(dungeon.players_in_dungeon)
-  res.send(playerList)
+  res.send(dungeon.players_in_dungeon)
 })
 
 app.listen(port, () => {
