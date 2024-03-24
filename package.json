@@ -26,6 +26,7 @@
     "@twurple/easy-bot": "^7.0.10",
     "ESLint": "npm:eslint@^8.56.0",
     "dotenv": "^16.0.3",
+    "express": "^4.19.1",
     "tmi.js": "^1.8.5"
   }
 }

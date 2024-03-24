@@ -43,8 +43,6 @@ const bot = new Bot({
 
 const botSay = (x) => {bot.say('daemo72', x)}
 
-
-
 app.use(express.static('public'))
 app.use(express.json())
 
